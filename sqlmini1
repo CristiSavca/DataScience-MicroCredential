@@ -1,0 +1,46 @@
+-- creating videos table
+-- table has ID, title of video, length minutes, and URL.
+CREATE TABLE public.videos (
+video_id integer UNIQUE NOT NULL,
+title VARCHAR(255) NOT NULL,
+length integer,
+URL VARCHAR(255) NOT NULL,
+CONSTRAINT video_id_pkey PRIMARY KEY (video_id)
+);
+
+-- populating the table
+INSERT INTO VIDEOS VALUES(1, 'Why Startups spend millions at conferences', 9, 'https://www.youtube.com/watch?v=cB2uJ589Hak&t=447s');
+INSERT INTO VIDEOS VALUES(2, 'Self Discipline the Neuroscience', 240, 'https://www.youtube.com/watch?v=ldiaiDt1w9g&t=13346s');
+INSERT INTO VIDEOS VALUES(3, 'The BEST SWE Internship Resources', 15, 'https://www.youtube.com/watch?v=gClgnY_6asI');
+INSERT INTO VIDEOS VALUES(4, 'Andrew Tates Dad was legendary chess tactician', 24, 'https://www.youtube.com/watch?v=SLcLBu-6SS8');
+
+-- checking if data corrected inserted
+SELECT * FROM videos;
+
+-- creating reviewers table
+-- should include user’s name, rating, and text review and ID column 
+CREATE TABLE public.reviewers (
+video_id integer UNIQUE NOT NULL,
+user_name VARCHAR(255) NOT NULL,
+rating integer,
+text_review VARCHAR(75) NOT NULL,
+CHECK (rating >= 0 AND rating <= 5),
+CONSTRAINT video_id_fkey FOREIGN KEY (video_id)
+   REFERENCES public.videos (video_id) MATCH SIMPLE
+   ON UPDATE NO ACTION
+   ON DELETE NO ACTION
+ );
+
+-- populating the table
+INSERT INTO REVIEWERS VALUES(1, 'My Man', 5, 'Wow very nice');
+INSERT INTO REVIEWERS VALUES(2, 'This Guy', 4, 'Rlly makes you think');
+INSERT INTO REVIEWERS VALUES(3, 'Chill Bro', 5, 'Great resources');
+INSERT INTO REVIEWERS VALUES(4, 'Idk Something', 5, 'Wow he is good at chess');
+
+-- checking if data was inserted correctly
+SELECT * FROM reviewers;
+
+-- JOIN statement that shows information from both tables
+SELECT * FROM videos
+LEFT JOIN reviewers
+ON videos.video_id = reviewers.video_id
